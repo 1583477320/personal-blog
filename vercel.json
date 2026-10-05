@@ -1,10 +1,5 @@
 {
   "framework": "nextjs",
-  "buildCommand": "next build",
-  "outputDirectory": "out",
-  "installCommand": "npm install",
-  "devCommand": "npm run dev",
-  "routes": [
-    { "src": "/(.*)", "dest": "/$1" }
-  ]
+  "installCommand": "npm ci",
+  "buildCommand": "next build"
 }

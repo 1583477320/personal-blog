@@ -191,8 +191,14 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
           : `---\nviews: ${next}\n---\n\n${raw}`
       }
 
-      fs.writeFileSync(file, updated, 'utf8')
-      return res.status(200).json({ views: next })
+      try {
+        fs.writeFileSync(file, updated, 'utf8')
+        return res.status(200).json({ views: next, persisted: true })
+      } catch (writeErr) {
+        // Vercel 等只读文件系统：无法持久化阅读量。
+        // 返回当前值而非报错，避免前端出现无意义的失败请求。
+        return res.status(200).json({ views: Number(data.views || 0), persisted: false })
+      }
     } catch (err) {
       console.error('[api/blog] POST 失败:', err)
       return res.status(500).json({ error: 'Failed to update views' })

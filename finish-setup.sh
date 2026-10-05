@@ -56,11 +56,28 @@ echo "✅ vault 已推送 → $REMOTE_URL"
 echo ""
 echo "══════════ 4/5 将 content 转为 git submodule ══════════"
 cd "$SITE_DIR"
+
+# 前置断言：确认 vault 已成功推送到远程，才动本地联接
+# （即便本地操作出问题，GitHub 上已有完整副本）
+if ! git ls-remote "$REMOTE_URL" main >/dev/null 2>&1; then
+  echo "❌ 远程仓库尚无 main 分支，拒绝删除本地联接。"
+  exit 1
+fi
+echo "✅ 远程已确认有 main 分支（内容已安全备份）"
+
 # 关键：content 是 Windows 目录联接（junction）
-# 必须用 cmd rmdir 只删链接本身，绝不能用 rm -rf（会递归删除源笔记！）
-if [ -L content ] || [ -d content ]; then
-  echo "→ 正在移除 content 联接（cmd rmdir，只删链接不删源文件）"
-  cmd //c rmdir "content" 2>/dev/null || rm -f content
+# 必须只删除重解析点本身 —— 绝不能用 rm -rf（会递归删除源笔记！）
+if [ -e content ]; then
+  LINK_TYPE="$(powershell -Command "(Get-Item 'content' -Force).LinkType" 2>/dev/null | tr -d '\r')"
+  echo "→ content 类型: ${LINK_TYPE:-普通目录}"
+
+  if [ "$LINK_TYPE" = "Junction" ] || [ "$LINK_TYPE" = "SymbolicLink" ]; then
+    # .NET DirectoryInfo.Delete() 对联接只移除重解析点，不递归目标
+    powershell -Command "(Get-Item 'content' -Force).Delete()" 2>&1 | tail -1
+  else
+    echo "⚠️ content 非联接，可能是实体目录，改为移入回收站路径备份"
+    mv content "content.bak.$(date +%s)"
+  fi
 fi
 
 # 断言：源笔记必须完好无损
@@ -70,6 +87,7 @@ if [ "$VAULT_COUNT" -lt 100 ]; then
   exit 1
 fi
 echo "✅ 源笔记完好（$VAULT_COUNT 个 .md 文件）"
+echo "✅ content 联接已安全移除"
 
 # 移除可能残留的索引
 git rm -r --cached content 2>/dev/null || true

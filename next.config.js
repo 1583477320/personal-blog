@@ -2,11 +2,18 @@
 const nextConfig = {
   reactStrictMode: true,
 
-  // 独立产物，便于容器化/自托管部署
-  output: 'standalone',
-
-  // 关闭响应头指纹
+  // 移除响应头指纹
   poweredByHeader: false,
+
+  // ── 关键：Vercel Serverless 打包 ──
+  // API 路由通过 fs.readFileSync('content/...') 读取 Markdown。
+  // Next.js 默认只追踪 import 依赖，不会打包这些运行时读取的文件，
+  // 必须显式声明，否则线上 API 会因找不到文件而失败。
+  experimental: {
+    outputFileTracingIncludes: {
+      '/api/**': ['./content/**/*'],
+    },
+  },
 
   // 安全响应头
   async headers() {
