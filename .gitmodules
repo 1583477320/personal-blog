@@ -1,0 +1,3 @@
+[submodule "content"]
+	path = content
+	url = https://github.com/1583477320/obsidian-notes.git
