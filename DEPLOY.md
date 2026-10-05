@@ -61,21 +61,42 @@ npx vercel --prod
 
 ## 四、后续更新笔记
 
-笔记改动后需要**推送 vault + 更新子模块引用**：
+### 方式一：一键发布（推荐）
+
+双击：
+
+```
+C:\Users\xiaozhu\projects\flowershow-site\发布网站.bat
+```
+
+或在终端执行 `bash publish.sh`。脚本自动完成：
+
+1. 提交 vault 改动
+2. 推送 GitHub（备份；不通会跳过，不影响发布）
+3. 从**本地 vault** 同步 content 子模块（不走网络，绕开 github.com 阻断）
+4. `vercel --prod` 部署
+
+耗时约 2 分钟。
+
+> 为什么能绕过被阻断的 GitHub：第 3 步用
+> `git fetch "D:/obsdidian file/学习" main` 走本地路径，完全不依赖网络。
+> 已实测在 github.com 不通的情况下发布成功。
+
+### 方式二：手工（脚本出问题时排查用）
 
 ```bash
-# 1. 推送笔记
+# 1. 提交笔记
 cd "D:\obsdidian file\学习"
 git add -A && git commit -m "更新笔记"
-git push
 
-# 2. 更新站点里的子模块指针
+# 2. 同步 content（本地 fetch，不用网络）
+cd C:\Users\xiaozhu\projects\flowershow-site\content
+git fetch "D:/obsdidian file/学习" main
+git reset --hard FETCH_HEAD
+
+# 3. 提交子模块指针并部署
 cd C:\Users\xiaozhu\projects\flowershow-site
-git submodule update --remote content
-git commit -am "chore: 同步笔记"
-git push
-
-# 3. 重新部署
+git add content && git commit -m "同步笔记"
 npx vercel --prod
 ```
 
