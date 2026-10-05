@@ -1,0 +1,375 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ═══════════════════════════════════════════
+   NEO-BRUTALIST PLAYFUL — 基础样式
+   ═══════════════════════════════════════════ */
+
+:root {
+  --nb-black: #1a1a1a;
+  --nb-white: #ffffff;
+  --nb-red: #ff6b6b;
+  --nb-cyan: #4ecdc4;
+  --nb-yellow: #ffe66d;
+  --nb-mint: #95e1d3;
+  --nb-coral: #f38181;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Space Mono', 'Courier New', monospace;
+  background-color: var(--nb-white);
+  color: var(--nb-black);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* ── 滚动条 ── */
+::-webkit-scrollbar {
+  width: 14px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--nb-white);
+  border-left: 4px solid var(--nb-black);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--nb-red);
+  border: 4px solid var(--nb-black);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--nb-cyan);
+}
+
+/* ═══════════════════════════════════════════
+   装饰性几何图形
+   ═══════════════════════════════════════════ */
+
+.deco-square {
+  position: fixed;
+  border: 4px solid var(--nb-black);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.deco-circle {
+  position: fixed;
+  border: 4px solid var(--nb-black);
+  border-radius: 50%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ═══════════════════════════════════════════
+   组件层 —— 全部遵守野兽派 Token
+   ═══════════════════════════════════════════ */
+
+@layer components {
+  /* 按钮：无圆角 + 4px 黑边 + 硬阴影 + hover 位移 */
+  .nb-btn {
+    @apply rounded-none border-4 border-black font-black uppercase inline-flex items-center justify-center gap-2 px-6 py-3;
+    @apply shadow-neo transition-all duration-300;
+    @apply hover:shadow-none hover:translate-x-[3px] hover:translate-y-[3px] hover:scale-105;
+    @apply active:scale-95 active:shadow-none active:translate-x-[6px] active:translate-y-[6px];
+    /* Toy Spring 弹簧回弹 */
+    transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  /* 卡片：无圆角 + 4px 黑边 */
+  .nb-card {
+    @apply rounded-none border-4 border-black bg-white transition-all duration-300;
+    @apply hover:shadow-none hover:translate-x-[3px] hover:translate-y-[3px];
+    transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  /* 输入框 */
+  .nb-input {
+    @apply rounded-none border-4 border-black bg-white font-mono px-4 py-3 w-full;
+    @apply focus:outline-none focus:shadow-neo-cyan transition-all duration-300;
+  }
+
+  /* 标签芯片 */
+  .nb-chip {
+    @apply rounded-none border-[3px] border-black font-black uppercase px-3 py-1 text-xs transition-all duration-300;
+    @apply hover:scale-105 hover:-translate-y-1;
+    transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  /* 区块标题 */
+  .nb-heading {
+    @apply font-black uppercase tracking-tight leading-none;
+  }
+}
+
+/* ═══════════════════════════════════════════
+   文章正文排版（替代 typography 插件）
+   ═══════════════════════════════════════════ */
+
+.nb-prose {
+  font-family: 'Space Grotesk', Arial, sans-serif;
+  color: #262626;
+  font-size: 1.0625rem;
+  line-height: 1.8;
+  max-width: 72ch;
+}
+
+.nb-prose h1 {
+  font-family: 'Space Mono', monospace;
+  font-weight: 900;
+  text-transform: uppercase;
+  font-size: 2rem;
+  line-height: 1.2;
+  color: var(--nb-black);
+  margin: 2.5rem 0 1.25rem;
+  padding: 1rem 1.25rem;
+  border: 4px solid var(--nb-black);
+  background: var(--nb-yellow);
+  box-shadow: 6px 6px 0px 0px var(--nb-black);
+}
+
+.nb-prose h2 {
+  font-family: 'Space Mono', monospace;
+  font-weight: 900;
+  text-transform: uppercase;
+  font-size: 1.5rem;
+  line-height: 1.3;
+  color: var(--nb-black);
+  margin: 2.25rem 0 1rem;
+  padding-left: 1rem;
+  border-left: 8px solid var(--nb-red);
+}
+
+.nb-prose h3 {
+  font-family: 'Space Mono', monospace;
+  font-weight: 900;
+  text-transform: uppercase;
+  font-size: 1.15rem;
+  color: var(--nb-black);
+  margin: 1.75rem 0 0.75rem;
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border: 3px solid var(--nb-black);
+  background: var(--nb-mint);
+}
+
+.nb-prose p {
+  margin-bottom: 1.25rem;
+}
+
+.nb-prose a {
+  color: var(--nb-black);
+  font-weight: 700;
+  text-decoration: none;
+  border-bottom: 3px solid var(--nb-red);
+  transition: all 0.2s ease;
+}
+
+.nb-prose a:hover {
+  background: var(--nb-yellow);
+  border-bottom-color: var(--nb-black);
+}
+
+.nb-prose strong {
+  font-weight: 900;
+  color: var(--nb-black);
+  background: linear-gradient(transparent 60%, var(--nb-yellow) 60%);
+}
+
+.nb-prose em {
+  font-style: italic;
+  color: #404040;
+}
+
+.nb-prose ul,
+.nb-prose ol {
+  margin: 1.25rem 0 1.5rem;
+  padding-left: 0;
+  list-style: none;
+}
+
+.nb-prose ul li,
+.nb-prose ol li {
+  position: relative;
+  padding-left: 2rem;
+  margin-bottom: 0.625rem;
+}
+
+.nb-prose ul li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.6em;
+  width: 12px;
+  height: 12px;
+  background: var(--nb-cyan);
+  border: 3px solid var(--nb-black);
+}
+
+.nb-prose ol {
+  counter-reset: nb-counter;
+}
+
+.nb-prose ol li {
+  counter-increment: nb-counter;
+}
+
+.nb-prose ol li::before {
+  content: counter(nb-counter);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Space Mono', monospace;
+  font-weight: 900;
+  font-size: 0.75rem;
+  background: var(--nb-yellow);
+  border: 3px solid var(--nb-black);
+}
+
+/* 行内代码 */
+.nb-prose code {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.875em;
+  font-weight: 700;
+  background: var(--nb-yellow);
+  border: 2px solid var(--nb-black);
+  padding: 0.1em 0.4em;
+}
+
+/* 代码块 */
+.nb-prose pre {
+  background: var(--nb-black);
+  border: 4px solid var(--nb-black);
+  box-shadow: 6px 6px 0px 0px var(--nb-cyan);
+  padding: 1.5rem;
+  margin: 1.75rem 0;
+  overflow-x: auto;
+}
+
+.nb-prose pre code {
+  background: transparent;
+  border: none;
+  padding: 0;
+  color: #e8e8e8;
+  font-size: 0.875rem;
+  line-height: 1.7;
+  font-weight: 400;
+}
+
+/* 引用 */
+.nb-prose blockquote {
+  border: 4px solid var(--nb-black);
+  border-left-width: 12px;
+  background: var(--nb-mint);
+  padding: 1.25rem 1.5rem;
+  margin: 1.75rem 0;
+  font-style: italic;
+  box-shadow: 6px 6px 0px 0px var(--nb-black);
+}
+
+.nb-prose blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+/* 表格 */
+.nb-prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.75rem 0;
+  border: 4px solid var(--nb-black);
+}
+
+.nb-prose thead th {
+  background: var(--nb-yellow);
+  font-family: 'Space Mono', monospace;
+  font-weight: 900;
+  text-transform: uppercase;
+  font-size: 0.8125rem;
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border: 3px solid var(--nb-black);
+}
+
+.nb-prose tbody td {
+  padding: 0.75rem 1rem;
+  border: 3px solid var(--nb-black);
+}
+
+.nb-prose tbody tr:nth-child(even) {
+  background: #fefdf5;
+}
+
+.nb-prose hr {
+  border: none;
+  border-top: 4px solid var(--nb-black);
+  margin: 2.5rem 0;
+}
+
+.nb-prose img {
+  border: 4px solid var(--nb-black);
+  box-shadow: 8px 8px 0px 0px var(--nb-black);
+  max-width: 100%;
+  margin: 1.75rem 0;
+}
+
+/* ═══════════════════════════════════════════
+   动画
+   ═══════════════════════════════════════════ */
+
+@keyframes nb-bob {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50% { transform: translateY(-8px) rotate(-2deg); }
+}
+
+@keyframes nb-slide-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.nb-bob {
+  animation: nb-bob 3s ease-in-out infinite;
+}
+
+.nb-enter {
+  animation: nb-slide-up 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* 无障碍：减少动效偏好 */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* 打印 */
+@media print {
+  .deco-square,
+  .deco-circle {
+    display: none;
+  }
+  body {
+    background: #fff;
+  }
+}

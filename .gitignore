@@ -1,0 +1,32 @@
+# ── 依赖与构建产物 ──
+node_modules/
+.next/
+out/
+build/
+
+# ── 环境变量（切勿提交）──
+.env
+.env.local
+.env*.local
+
+# ── Vercel ──
+.vercel/
+
+# ── 调试与临时文件 ──
+*.log
+npm-debug.log*
+check.html
+page-check.html
+css-test.css
+
+# ── 系统文件 ──
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── TypeScript 增量缓存 ──
+*.tsbuildinfo
+next-env.d.ts
+
+# 说明：content/ 将作为 git submodule（指向 Obsidian 笔记仓库）
+# 不要在此忽略，否则 submodule 的 gitlink 无法提交
