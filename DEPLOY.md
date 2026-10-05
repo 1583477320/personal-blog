@@ -83,7 +83,48 @@ npx vercel --prod
 
 ---
 
-## 五、已知限制
+## 六、网络诊断结论（重要）
+
+```
+api.github.com  → 200   ✅（gh 命令可用）
+github.com      → 000   ❌（git push 受阻）
+vercel.com      → 200   ✅（CLI 部署可行）
+*.vercel.app    → 污染  ❌（DNS 污染 + SNI 阻断）
+```
+
+### 部署成功，但你的网络看不到
+
+Vercel 云端构建状态为 **`● Ready`**，站点已全球上线。但从当前网络
+**无法访问 `*.vercel.app`**，原因是双重阻断：
+
+1. **DNS 污染**：`personal-blog-self-delta.vercel.app` 被解析到
+   `69.171.247.32` / `2a03:2880:f11c:8083:face:b00c:0:25de`
+   （`face:b00c` 是 Facebook 的 IPv6 标志，GFW 典型污染特征）
+2. **SNI 阻断**：即使通过 DoH 拿到真实 IP（`64.29.17.195`）并用
+   `curl --resolve` 直连，TLS 握手仍被中断（exit 35）
+
+> 结论：**站点本身没问题，是你的网络到 Vercel 边缘节点的链路被阻断。**
+> 墙外访客可正常访问。
+
+### 解决方案
+
+| 方案 | 说明 | 备注 |
+|------|------|------|
+| **绑定自有域名**（推荐） | 自有域名 DNS 正常解析，且保护策略为 `all_except_custom_domains` —— 自定义域名自动不受保护 | SNI 阻断针对 `*.vercel.app`，自有域名有较大概率可通 |
+| 代理 / VPN | 本地科学上网后访问 | 仅解决你自己查看，不影响公开访问 |
+| 换托管平台 | Cloudflare Pages / Netlify 等 | 这些平台在国内同样常被阻断，未必更优 |
+
+绑定自有域名：
+
+```bash
+cd C:\Users\xiaozhu\projects\flowershow-site
+npx vercel domains add 你的域名.com
+# 然后到域名服务商处按提示配置 DNS 记录（A / CNAME）
+```
+
+---
+
+## 七、其他已知限制
 
 - **阅读量无法持久化**：Vercel 文件系统只读，`POST /api/blog` 已改为优雅降级
   （返回当前值而不报错）。若要真实统计，需接入 Vercel KV 或数据库。

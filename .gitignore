@@ -30,3 +30,6 @@ next-env.d.ts
 
 # 说明：content/ 将作为 git submodule（指向 Obsidian 笔记仓库）
 # 不要在此忽略，否则 submodule 的 gitlink 无法提交
+
+.vercel
+.env*
